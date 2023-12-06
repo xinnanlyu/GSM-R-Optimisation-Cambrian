@@ -1,0 +1,57 @@
+
+The ExtSim file is currently configured to work with Windows only (winsock library).
+To run on Linux, roll back ExtSim.h to CVS:v1.2 and ExtSim.cc to CVS:v1.3.
+
+////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////             Install Guide              ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Step 0: download windows version of omnetpp-5.0 and INET v3.2.4. Newer version of INET isn't currently compatible.
+
+To install OMNeT++ on windows
+1.    Install latest Java JDK
+2.    Add path of Java JDK into JAVA_HOME in Environment Variables (omnet complains java_home not found when ./configure)
+3.    (optional) install MinGW on Windows
+4.    Disable ALL anti-virus software (I have met lots of issues before, but when I uninstall my anti-virus, the problems are gone)
+5.    Extract omnet v4.6 or v5.0b2, ./configure then make –j4  (make –j4 means use 4 CPU threads when compiling, can also use make –j8 if your CPU supports 8 threads)
+6.    Leave the mingenv.cmd windows open, and get into omnet
+7.    Import INET v3.1.1 downloaded from https://inet.omnetpp.org/Download.html    but do not BUILD, if you have built it, please clean INET.
+
+Change INET to compile to a shared library instead of a DLL.
+8.	  Right click INET - Properties - OMNeT++ - Makemake (this can take more time if you have built the INET)
+9.    choose src:makemake(deep, no-rescue)-->INET(static...), then select Options in Build at upper right part
+10	  change the Build to static library(.lib or .a), then apply, then Build All
+
+About parallel build: 
+The CBTC project is configured to build in parallel, make sure you check the configuration is suitable for your PC before building the project. To do this:
+Right click the project and select Properties. Go to Behavior in C++ Build tab, and select Use Optimal Jobs. (or configure the Use Parallel Jobs number to the number of CPU cores you have)
+This is to make sure omnet use same mumber of CPU cores you have to build a project (and reduce time of waiting), otherwise if omnet use too much cores, it will drain your system memory.
+
+////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////             To Run              //////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+If you have already built the whole workspace, go to /CBTC/simulation, then right click omnetpp.ini, choose Run AS -> OMNeT++ Simulation
+This will run the simulation without building the workspace.
+
+If you have modified the project *.h *.cc or *.NED file, you need to build the project again. To do this, you can either choose BUILD or use green RUN button at the top centre of IDE.
+If you have changed the *.ini file only, there is no need to re-build.
+
+The order for connecting with BRaVE
+1. Run omnetpp.ini using right click.
+2. Filter off the windows content in OMNeT++ simulation panel to increase speed.
+3. Launch BRaVE and launch DCS connection.
+4. Run BRaVE model with express mode.
+5. Run OMNeT++ simulation with fast or express mode. 
+
+Caution: Launch (but not run) OMNeT++ model before opening BRaVE!!! Or you won't be able to run OMNeT++ model.
+
+////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////             To Commit              ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Commiting the whole project folder onto CVS will upload all the files which are differently. 
+This will take a lot of time if your project is complied, as the executable file is normally over 150MB.
+
+Therefore please commit the modified files only on CVS. Otherwise please clean the project (right click -> Clean Local) 
+and delete the /simulation/result folder before making a commit of a whole CBTC folder.
